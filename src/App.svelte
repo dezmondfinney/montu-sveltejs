@@ -2,19 +2,34 @@
   import { onMount } from "svelte";
   import Task from "./Task.svelte";
 
-  export let name;
-	let tasks = [];
-	let task = {};
+  export let url = "http://localhost:9090/tasks";
+  let tasks = [];
+  let task = {};
 
   onMount(async () => {
-    const res = await fetch(`http://127.0.0.1:8080/tasks`);
-		tasks = await res.json();
-		task = tasks[0]
-    console.log(tasks["0"].description);
+    const res = await fetch(url);
+    tasks = await res.json();
+    tasks.sort((a, b) => {
+      if (a.urgency < b.urgency) return 1;
+      if (a.urgency > b.urgency) return -1;
+      return 0;
+    });
+    task = tasks[0];
   });
 
-  const reloadTasks = () => {
-    console.log("hello");
+  const fetchTasks = () => {
+    fetch(url)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        tasks = data;
+        tasks.sort((a, b) => {
+          if (a.urgency < b.urgency) return 1;
+          if (a.urgency > b.urgency) return -1;
+          return 0;
+        });
+      });
   };
 </script>
 
@@ -24,6 +39,7 @@
 
 <main>
 	<h1>Taskwarrior</h1>
+  <button on:click={fetchTasks}>Reload Tasks</button>
   <ul>
     {#each tasks as task, i}
       <li>
@@ -31,12 +47,4 @@
       </li>
     {/each}
   </ul>
-
-	<form action="submit">
-		<input type="text" placeholder="Description" value={ task.description }>
-		<input type="text" placeholder="Project" value={ task.project }>
-		<button type="submit">Save</button>
-	</form>
-
-  <button on:click={reloadTasks}>Reload Tasks</button>
 </main>
