@@ -34,11 +34,15 @@
 </script>
 
 <style>
-
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
 </style>
 
 <main>
-	<h1>Taskwarrior</h1>
+  <h1>Taskwarrior</h1>
   <button on:click={fetchTasks}>Reload Tasks</button>
   <ul>
     {#each tasks as task, i}
