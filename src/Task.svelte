@@ -1,94 +1,239 @@
 <script>
   import { DateTime } from "luxon";
+  import Icon from "svelte-awesome";
+  import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
+  import {
+    calendar,
+    exclamation,
+    check,
+    bell,
+    tag,
+    plus,
+    clipboard,
+    stickyNote
+  } from "svelte-awesome/icons";
   export let task = {};
+  const editTask = () => {
+    console.log("Hello: " + task.description);
+  };
 </script>
 
 <style>
-  .task {
-    border: 1px solid #333;
-    background-color: rgba(243, 243, 243, 0.5);
-    border-radius: 4px;
-    margin: 15px;
-    padding: 15px;
+  :root {
+    --textColor: rgb(119, 119, 119);
   }
-  .noteList {
+  /* .taskList ul {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    max-width: 768px;
+  } */
+
+  .task {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(3, auto);
+    grid-gap: 6px;
+    grid-template-areas:
+      "d d d d d D D"
+      "p t t t t D D"
+      "N N N N N N n";
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    font-family: sans-serif;
+    font-size: 14px;
+    padding: 5px;
+    margin: 10px;
+    /* color: rgb(119, 119, 119); */
+    color: var(--textColor);
+  }
+
+  .project span,
+  .due span,
+  .scheduled span,
+  .description span {
+    padding: 0 10px;
+  }
+
+  .description {
+    align-self: start;
+    display: flex;
+    align-items: center;
+    grid-area: d;
+    font-weight: 700;
+    /* min-height: 40px; */
+  }
+
+  .dates {
+    grid-area: D;
+    display: flex;
+    font-size: 80%;
+  }
+
+  .project {
+    display: flex;
+    align-items: center;
+    font-weight: 100;
+    font-style: italic;
+    font-size: 80%;
+    color: rgb(161, 159, 159);
+  }
+
+  .dates > * {
+    /* display: flex;
+    align-items: center;
+    padding-left: 15px; */
+  }
+
+  .tags {
+    grid-area: t;
+    display: flex;
+    justify-self: start;
+    align-items: center;
+  }
+
+  .tags ul {
+    list-style: none;
     margin: 0;
     padding: 0;
-    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
   }
-  .noteList > * {
-    border-top: 1px solid #444;
+
+  .tag {
+    margin: 3px 5px;
+    padding: 3px 10px;
+    border-radius: 15px;
+    background-color: var(--textColor);
+    color: #fff;
+    font-size: 60%;
+  }
+
+  .addNote {
+    grid-area: n;
+    background-color: transparent;
+    border: none;
+    color: var(--textColor);
+  }
+
+  .notes {
+    grid-area: N;
+    display: none;
+  }
+
+  .newNote textarea {
+    background-color: white;
+    margin: 0;
+    margin-top: 20px;
+    padding: 0;
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--textColor);
+    border-bottom: 1px solid var(--textColor);
+    min-height: 150px;
+    background-color: rgb(245, 245, 245);
+  }
+
+  .notes ul {
+    margin-top: 20px;
+  }
+
+  .note {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(1, auto);
+    grid-template-areas: "ND D D D D";
+  }
+
+  .noteDate {
+    grid-area: ND;
+  }
+
+  .noteDescription {
+    grid-area: D;
+    border-left: 1px solid rgb(182, 182, 182);
+    padding-left: 10px;
+    min-height: 50px;
+  }
+  .noteDescription p {
+    margin: 0;
   }
 </style>
 
 <div class="task">
   <div class="description">
-    <strong>Description:</strong>
-    {task.description}
+    <i class="far fa-circle" />
+    <span>{task.description}</span>
   </div>
 
   <div class="project">
-    <strong>Project:</strong>
-    {#if task.project}{task.project}{:else}No Project{/if}
+    <i class="fas fa-project-diagram"></i>
+    <span>
+      {#if task.project}{task.project}{:else}No Project{/if}
+    </span>
   </div>
 
-  <div class="due">
-    {#if task.due}
-      <strong>Due:</strong>
-      {DateTime.fromISO(task.due).toLocaleString({
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit'
-      })}
-    {/if}
-  </div>
+  <div class="dates">
+    <div class="scheduled">
+      {#if task.scheduled}
+        <i class="fas fa-calendar" />
+        <span>
+          {DateTime.fromISO(task.scheduled).toLocaleString({
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit'
+          })}
+        </span>
+      {/if}
+    </div>
 
-  <div class="scheduled">
-    {#if task.scheduled}
-      <strong>Scheduled:</strong>
-      {DateTime.fromISO(task.scheduled).toLocaleString({
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit'
-      })}
-    {/if}
-  </div>
+    <div class="due">
+      {#if task.due}
+        <i class="fas fa-bell" />
+        <span>
+          {DateTime.fromISO(task.due).toLocaleString({
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit'
+          })}
+        </span>
+      {/if}
+    </div>
 
-  <div class="urgency">
-    <strong>Urgency:</strong>
-    {task.urgency}
   </div>
-
-  <hr />
 
   <div class="tags">
+
     {#if task.tags}
-      <strong>Tags:</strong>
       <ul>
         {#each task.tags as tag, i}
-          <li>{tag}</li>
-        {/each}
-      </ul>
-    {/if}
-    <button>Add Tags</button>
-  </div>
-
-  <div class="notes">
-    {#if task.annotations}
-      <strong>Notes:</strong>
-      <ul class="noteList">
-        {#each task.annotations as note, i}
           <li>
-            {DateTime.fromISO(note.entry).toLocaleString(DateTime.DATE_HUGE)}
-            <br />
-            <textarea name="note" id="note">{note.description}</textarea>
+            <div class="tag">{tag}</div>
           </li>
         {/each}
       </ul>
     {/if}
-    <button>Add a note</button>
-  </div>
 
+  </div>
+  <button class="addNote">
+    <i class="fas fa-sticky-note" />
+  </button>
+
+  <div class="notes">
+    <div class="newNote">
+      <textarea name="newNote" id="newNote" cols="" rows="" />
+    </div>
+    <ul>
+      <li>
+        <div class="note">
+          <div class="noteDate">Mon, May 3, 17:30</div>
+          <div class="noteDescription">
+            <p>this is a note</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
