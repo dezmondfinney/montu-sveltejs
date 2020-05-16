@@ -2,26 +2,51 @@
   import { onMount } from "svelte";
   import Task from "./Task.svelte";
 
-  // export let url = "http://localhost:5500/tasks";
-  export let url = "tasks.json";
-  let task = {};
+  export let url = "";
+  export let path = "tasks.json";
   let tasks = [];
+  $: pending_tasks = tasks.filter(task => {
+    if (task.status === "pending") {
+      return task;
+    }
+  });
+  $: completed_tasks = tasks.filter(task => {
+    if (task.status === "completed") {
+      return task;
+    }
+  });
   $: tags = [...new Set(tasks.map(task => task.tags))];
-  $: projects = [...new Set(tasks.map(task => task.project))];
+  $: projects = [
+    ...new Set(
+      tasks.map(task => {
+        if (typeof task.project !== "undefined") {
+          return task.project;
+        }
+      })
+    )
+  ];
+  $: pending_projects = [
+    ...new Set(
+      pending_tasks.map(task => {
+        if (typeof task.project !== "undefined") {
+          return task.project;
+        }
+      })
+    )
+  ];
 
   onMount(async () => {
-    const res = await fetch(url);
+    const res = await fetch(url+path);
     tasks = await res.json();
     tasks.sort((a, b) => {
       if (a.urgency < b.urgency) return 1;
       if (a.urgency > b.urgency) return -1;
       return 0;
     });
-    task = tasks[0];
   });
 
   const fetchTasks = () => {
-    fetch(url)
+    fetch(url+path)
       .then(response => {
         return response.json();
       })
@@ -42,7 +67,8 @@
   }
   .smartList ul,
   .projectList ul,
-  .taskList ul {
+  .taskList_pending ul,
+  .taskList_completed ul {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -67,7 +93,7 @@
 
   <div class="projectList">
     <ul>
-      {#each projects as project, i}
+      {#each pending_projects as project, i}
         <li>{project}</li>
       {/each}
     </ul>
@@ -83,9 +109,21 @@
     </ul>
   </div>
 
-  <div class="taskList">
+  <div class="taskList_pending">
+    <h3>Pending Tasks</h3>
     <ul>
-      {#each tasks as task, i}
+      {#each pending_tasks as task, i}
+        <li>
+          <Task {task} />
+        </li>
+      {/each}
+    </ul>
+  </div>
+
+  <div class="taskList_completed">
+    <h3>Completed Tasks</h3>
+    <ul>
+      {#each completed_tasks as task, i}
         <li>
           <Task {task} />
         </li>
