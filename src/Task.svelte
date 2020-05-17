@@ -33,10 +33,9 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: repeat(3, auto);
-    grid-gap: 6px;
     grid-template-areas:
-      "d d d d d D D"
-      "p t t t t D D"
+      "d d d d D D D"
+      "e e e e e . ."
       "N N N N N N n";
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -61,13 +60,20 @@
     align-items: center;
     grid-area: d;
     font-weight: 700;
-    /* min-height: 40px; */
+    min-height: 40px;
   }
 
   .dates {
     grid-area: D;
-    display: flex;
     font-size: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .details {
+    grid-area: e;
+    display: flex;
   }
 
   .project {
@@ -79,18 +85,12 @@
     color: rgb(161, 159, 159);
   }
 
-  .dates > * {
-    /* display: flex;
-    align-items: center;
-    padding-left: 15px; */
-  }
-
-  .tags {
+  /* .tags {
     grid-area: t;
     display: flex;
     justify-self: start;
     align-items: center;
-  }
+  } */
 
   .tags ul {
     list-style: none;
@@ -114,10 +114,11 @@
     background-color: transparent;
     border: none;
     color: var(--textColor);
+    display: none;
   }
 
   .notes {
-    grid-area: N;
+    /* grid-area: N; */
     display: none;
   }
 
@@ -166,13 +167,6 @@
     <span>{task.description}</span>
   </div>
 
-  <div class="project">
-    <i class="fas fa-project-diagram"></i>
-    <span>
-      {#if task.project}{task.project}{:else}No Project{/if}
-    </span>
-  </div>
-
   <div class="dates">
     <div class="scheduled">
       {#if task.scheduled}
@@ -204,36 +198,47 @@
 
   </div>
 
-  <div class="tags">
+  <div class="details">
 
-    {#if task.tags}
-      <ul>
-        {#each task.tags as tag, i}
-          <li>
-            <div class="tag">{tag}</div>
-          </li>
-        {/each}
-      </ul>
-    {/if}
-
-  </div>
-  <button class="addNote">
-    <i class="fas fa-sticky-note" />
-  </button>
-
-  <div class="notes">
-    <div class="newNote">
-      <textarea name="newNote" id="newNote" cols="" rows="" />
+    <div class="project">
+      {#if task.project}
+        <i class="fas fa-project-diagram" />
+        <span>{task.project}</span>
+      {/if}
     </div>
-    <ul>
-      <li>
-        <div class="note">
-          <div class="noteDate">Mon, May 3, 17:30</div>
-          <div class="noteDescription">
-            <p>this is a note</p>
+
+    <div class="tags">
+
+      {#if task.tags}
+        <ul>
+          {#each task.tags as tag, i}
+            <li>
+              <div class="tag">{tag}</div>
+            </li>
+          {/each}
+        </ul>
+      {/if}
+
+    </div>
+
+    <div class="notes">
+      <button class="addNote">
+        <i class="fas fa-sticky-note" />
+      </button>
+      <div class="newNote">
+        <textarea name="newNote" id="newNote" cols="" rows="" />
+      </div>
+      <ul>
+        <li>
+          <div class="note">
+            <div class="noteDate">Mon, May 3, 17:30</div>
+            <div class="noteDescription">
+              <p>this is a note</p>
+            </div>
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </div>
   </div>
+
 </div>
