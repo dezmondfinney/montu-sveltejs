@@ -18,6 +18,88 @@
   };
 </script>
 
+<div class="task">
+  <div class="description">
+    <i class="far fa-circle" />
+    <span>{task.description}</span>
+  </div>
+
+  <div class="dates">
+    <div class="scheduled">
+      {#if task.scheduled}
+        <i class="fas fa-calendar" />
+        <span>
+          {DateTime.fromISO(task.scheduled).toLocaleString({
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit'
+          })}
+        </span>
+      {/if}
+    </div>
+
+    <div class="due">
+      {#if task.due}
+        <i class="fas fa-bell" />
+        <span>
+          {DateTime.fromISO(task.due).toLocaleString({
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit'
+          })}
+        </span>
+      {/if}
+    </div>
+
+  </div>
+
+  <div class="details">
+
+    <div class="project">
+      {#if task.project}
+        <i class="fas fa-project-diagram" />
+        <span>{task.project}</span>
+      {/if}
+    </div>
+
+    <div class="tags">
+
+      {#if task.tags}
+        <ul>
+          {#each task.tags as tag, i}
+            <li>
+              <div class="tag">{tag}</div>
+            </li>
+          {/each}
+        </ul>
+      {/if}
+
+    </div>
+
+    <div class="notes">
+      <button class="addNote">
+        <i class="fas fa-sticky-note" />
+      </button>
+      <div class="newNote">
+        <textarea name="newNote" id="newNote" cols="" rows="" />
+      </div>
+      <ul>
+        <li>
+          <div class="note">
+            <div class="noteDate">Mon, May 3, 17:30</div>
+            <div class="noteDescription">
+              <p>this is a note</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
 <style>
   :root {
     --textColor: rgb(119, 119, 119);
@@ -160,85 +242,3 @@
     margin: 0;
   }
 </style>
-
-<div class="task">
-  <div class="description">
-    <i class="far fa-circle" />
-    <span>{task.description}</span>
-  </div>
-
-  <div class="dates">
-    <div class="scheduled">
-      {#if task.scheduled}
-        <i class="fas fa-calendar" />
-        <span>
-          {DateTime.fromISO(task.scheduled).toLocaleString({
-            month: 'numeric',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit'
-          })}
-        </span>
-      {/if}
-    </div>
-
-    <div class="due">
-      {#if task.due}
-        <i class="fas fa-bell" />
-        <span>
-          {DateTime.fromISO(task.due).toLocaleString({
-            month: 'numeric',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit'
-          })}
-        </span>
-      {/if}
-    </div>
-
-  </div>
-
-  <div class="details">
-
-    <div class="project">
-      {#if task.project}
-        <i class="fas fa-project-diagram" />
-        <span>{task.project}</span>
-      {/if}
-    </div>
-
-    <div class="tags">
-
-      {#if task.tags}
-        <ul>
-          {#each task.tags as tag, i}
-            <li>
-              <div class="tag">{tag}</div>
-            </li>
-          {/each}
-        </ul>
-      {/if}
-
-    </div>
-
-    <div class="notes">
-      <button class="addNote">
-        <i class="fas fa-sticky-note" />
-      </button>
-      <div class="newNote">
-        <textarea name="newNote" id="newNote" cols="" rows="" />
-      </div>
-      <ul>
-        <li>
-          <div class="note">
-            <div class="noteDate">Mon, May 3, 17:30</div>
-            <div class="noteDescription">
-              <p>this is a note</p>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-</div>

@@ -1,5 +1,7 @@
 <script>
   import { onMount } from "svelte";
+  import ProjectsList from './ProjectsList.svelte';
+  import TaskList from './TaskList.svelte';
   import Task from "./Task.svelte";
 
   export let url = "";
@@ -61,73 +63,10 @@
   };
 </script>
 
-<style>
-  .smartList {
-    display: none;
-  }
-  .smartList ul,
-  .projectList ul,
-  .taskList_pending ul,
-  .taskList_completed ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .tagsList {
-    display: none;
-  }
-</style>
-
 <main>
   <h1>Taskwarrior</h1>
   <button on:click={fetchTasks}>Reload Tasks</button>
-
-  <div class="smartList">
-    <ul>
-      <li>Today</li>
-      <li>Next</li>
-      <li>Upcoming</li>
-      <li>Completed</li>
-    </ul>
-  </div>
-
-  <div class="projectList">
-    <ul>
-      {#each pending_projects as project, i}
-        <li>{project}</li>
-      {/each}
-    </ul>
-  </div>
-
-  <div class="tagsList">
-    <ul>
-      {#each tags as tag, i}
-        <li>
-          <div class="tag">{tag}</div>
-        </li>
-      {/each}
-    </ul>
-  </div>
-
-  <div class="taskList_pending">
-    <h3>Pending Tasks</h3>
-    <ul>
-      {#each pending_tasks as task, i}
-        <li>
-          <Task {task} />
-        </li>
-      {/each}
-    </ul>
-  </div>
-
-  <div class="taskList_completed">
-    <h3>Completed Tasks</h3>
-    <ul>
-      {#each completed_tasks as task, i}
-        <li>
-          <Task {task} />
-        </li>
-      {/each}
-    </ul>
-  </div>
+  <ProjectsList {pending_projects}/>
+  <TaskList tasks={pending_tasks} label="Pending Tasks"/>
+  <TaskList tasks={completed_tasks} label="Completed Tasks"/>
 </main>
