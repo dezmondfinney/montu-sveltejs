@@ -1,3 +1,7 @@
+:root {
+	--alert-color: orange;
+}
+
 body {
 	font-family: sans-serif;
 	color: rgb(74, 74, 74);

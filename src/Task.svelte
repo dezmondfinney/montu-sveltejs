@@ -19,7 +19,7 @@
 </script>
 
 <div class="task">
-  <div class="description">
+  <div on:click={editTask} class="description">
     <i class="far fa-circle" />
     <span>{task.description}</span>
   </div>
@@ -76,25 +76,6 @@
         </ul>
       {/if}
 
-    </div>
-
-    <div class="notes">
-      <button class="addNote">
-        <i class="fas fa-sticky-note" />
-      </button>
-      <div class="newNote">
-        <textarea name="newNote" id="newNote" cols="" rows="" />
-      </div>
-      <ul>
-        <li>
-          <div class="note">
-            <div class="noteDate">Mon, May 3, 17:30</div>
-            <div class="noteDescription">
-              <p>this is a note</p>
-            </div>
-          </div>
-        </li>
-      </ul>
     </div>
   </div>
 
@@ -189,56 +170,5 @@
     background-color: var(--textColor);
     color: #fff;
     font-size: 60%;
-  }
-
-  .addNote {
-    grid-area: n;
-    background-color: transparent;
-    border: none;
-    color: var(--textColor);
-    display: none;
-  }
-
-  .notes {
-    /* grid-area: N; */
-    display: none;
-  }
-
-  .newNote textarea {
-    background-color: white;
-    margin: 0;
-    margin-top: 20px;
-    padding: 0;
-    width: 100%;
-    border: none;
-    border-top: 1px solid var(--textColor);
-    border-bottom: 1px solid var(--textColor);
-    min-height: 150px;
-    background-color: rgb(245, 245, 245);
-  }
-
-  .notes ul {
-    margin-top: 20px;
-  }
-
-  .note {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(1, auto);
-    grid-template-areas: "ND D D D D";
-  }
-
-  .noteDate {
-    grid-area: ND;
-  }
-
-  .noteDescription {
-    grid-area: D;
-    border-left: 1px solid rgb(182, 182, 182);
-    padding-left: 10px;
-    min-height: 50px;
-  }
-  .noteDescription p {
-    margin: 0;
   }
 </style>
