@@ -14,12 +14,15 @@
       return task;
     }
   });
+
   $: completed_tasks = tasks.filter(task => {
     if (task.status === "completed") {
       return task;
     }
   });
+
   $: tags = [...new Set(tasks.map(task => task.tags))];
+
   $: projects = [
     ...new Set(
       tasks.map(task => {
@@ -29,10 +32,13 @@
       })
     )
   ];
+
   $: pending_projects = [
     ...new Set(
       pending_tasks.map(task => {
         if (typeof task.project !== "undefined") {
+          console.log(task.project);
+          
           return task.project;
         }
       })
@@ -47,11 +53,11 @@
       if (a.urgency > b.urgency) return -1;
       return 0;
     });
-    task = tasks.find((task) => {
-      if (task.uuid === "9daaad25-9fff-4f95-974e-e78bfac748a4") return task
-    })
   });
 
+  // --------------
+  // Functions
+  // --------------
   const fetchTasks = () => {
     fetch(url+path)
       .then(response => {
@@ -66,13 +72,23 @@
         });
       });
   };
+
+  const handleShowTask = (e) => {
+    task = tasks.find((task) => {
+      if (task.uuid === e.detail.uuid) return task
+    });
+  }
+  const handleCloseTask = () =>  task = {} 
 </script>
 
 <main>
   <h1>Taskwarrior</h1>
-  <TaskForm {task} />
-  <button on:click={fetchTasks}>Reload Tasks</button>
+
+  {#if typeof task.uuid !== "undefined"}
+    <button on:click={handleCloseTask}>close</button>
+    <TaskForm {task} />
+  {/if}
+
   <ProjectsList {pending_projects}/>
-  <TaskList tasks={pending_tasks} label="Pending Tasks"/>
-  <TaskList tasks={completed_tasks} label="Completed Tasks"/>
+  <TaskList tasks={pending_tasks} label="Pending Tasks" on:message={handleShowTask} />
 </main>

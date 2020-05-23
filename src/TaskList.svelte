@@ -2,6 +2,7 @@
   import Task from "./Task.svelte";
   export let tasks = [];
   export let label = "Tasks";
+
 </script>
 
 <div class="taskList">
@@ -9,7 +10,7 @@
     <ul>
       {#each tasks as task, i}
         <li>
-          <Task {task} />
+          <Task {task} on:message/>
         </li>
       {/each}
     </ul>

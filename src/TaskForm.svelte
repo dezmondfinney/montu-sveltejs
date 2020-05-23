@@ -29,6 +29,9 @@
   <label for="description">Description</label>
   <input name="description" type="text" value={task.description} />
 
+  <label for="project">Project</label>
+  <input name="project" type="text" value={task.project} />
+
   <label for="due">Due</label>
   <input
     name="due"
@@ -38,7 +41,7 @@
   <label for="scheduled">Scheduled</label>
   <input
     name="scheduled"
-    type="date"
+    type="datetime-local"
     value={DateTime.fromISO(task.scheduled).toISO({ includeOffset: false })} />
 
   <div class="annotations">

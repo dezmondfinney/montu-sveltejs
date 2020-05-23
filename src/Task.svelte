@@ -1,27 +1,25 @@
 <script>
   import { DateTime } from "luxon";
   import Icon from "svelte-awesome";
-  import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
-  import {
-    calendar,
-    exclamation,
-    check,
-    bell,
-    tag,
-    plus,
-    clipboard,
-    stickyNote
-  } from "svelte-awesome/icons";
+	import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
   export let task = {};
+
   const editTask = () => {
-    console.log("Hello: " + task.description);
+		dispatch('message', {
+			uuid: task.uuid
+    });
   };
 </script>
 
 <div class="task">
   <div on:click={editTask} class="description">
     <i class="far fa-circle" />
-    <span>{task.description}</span>
+    <span>{task.description}
+    
+  <button on:click={editTask}>edit task</button>
+    </span>
   </div>
 
   <div class="dates">
