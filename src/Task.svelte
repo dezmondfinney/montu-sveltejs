@@ -1,4 +1,5 @@
 <script>
+  import { tasksStore, taskStore } from "./stores/TaskStore.js";
   import { DateTime } from "luxon";
   import Icon from "svelte-awesome";
 	import { createEventDispatcher } from 'svelte';
@@ -7,9 +8,7 @@
   export let task = {};
 
   const editTask = () => {
-		dispatch('message', {
-			uuid: task.uuid
-    });
+    taskStore.set(task);
   };
 </script>
 

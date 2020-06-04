@@ -1,6 +1,27 @@
 <script>
   import { DateTime } from "luxon";
   export let task = {};
+  let newAnnotation = "";
+
+  async function handleSubmit(event) {
+    console.log(newAnnotation);
+
+    console.log(task);
+
+    const rawResponse = await fetch("http://localhost:8080/task/update", {
+      method: "POST",
+      body: JSON.stringify({
+        uuid: task.uuid,
+        description: task.description,
+        project: task.project,
+        annotation: newAnnotation
+      })
+    });
+    const content = await rawResponse.json();
+
+    console.log(content);
+    location.reload();
+  }
 </script>
 
 <style>
@@ -23,29 +44,42 @@
     padding: 0;
     list-style: none;
   }
+
+  .dates {
+    display: none;
+  }
 </style>
 
-<form action="edit/{task.id}" class="taskForm">
+<form
+  action="edit/{task.id}"
+  class="taskForm"
+  on:submit|preventDefault={handleSubmit}>
   <label for="description">Description</label>
-  <input name="description" type="text" value={task.description} />
+  <input name="description" type="text" bind:value={task.description} />
 
   <label for="project">Project</label>
-  <input name="project" type="text" value={task.project} />
+  <input name="project" type="text" bind:value={task.project} />
 
-  <label for="due">Due</label>
-  <input
-    name="due"
-    type="datetime-local"
-    value={DateTime.fromISO(task.due).toISO({ includeOffset: false })} />
+  <fieldset class="dates">
+    <legend>Dates</legend>
+    <label for="due">Due</label>
+    <input
+      name="due"
+      type="datetime-local"
+      value={DateTime.fromISO(task.due).toISO({ includeOffset: false })} />
 
-  <label for="scheduled">Scheduled</label>
-  <input
-    name="scheduled"
-    type="datetime-local"
-    value={DateTime.fromISO(task.scheduled).toISO({ includeOffset: false })} />
+    <label for="scheduled">Scheduled</label>
+    <input
+      name="scheduled"
+      type="datetime-local"
+      value={DateTime.fromISO(task.scheduled).toISO({
+        includeOffset: false
+      })} />
 
-  <div class="annotations">
-    <label for="annotation">Annotations</label>
+  </fieldset>
+
+  <fieldset class="annotations">
+    <legend>Annotations</legend>
     {#if task.annotations}
       <ul>
         {#each task.annotations as note, i}
@@ -63,20 +97,9 @@
         {/each}
       </ul>
     {/if}
-    <textarea name="annotation" id="annotation" />
-  </div>
+    <textarea name="annotation" id="annotation" bind:value={newAnnotation} />
+  </fieldset>
 
-  <label for="recur">
-    <i class="fas fa-redo" />
-    Recur
-  </label>
-  <select name="repeat" id="repeat">
-    <option value="daily">daily</option>
-    <option value="weekdays">weekdays</option>
-    <option value="weekly">weekly</option>
-    <option value="monthly">monthly</option>
-    <option value="yearly">yearly</option>
-  </select>
 
   <input type="submit" />
 </form>
